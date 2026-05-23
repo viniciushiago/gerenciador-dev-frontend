@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend — Gerenciador de Desenvolvedores
 
-## Getting Started
+## Tecnologias
+- Next.js 14
+- React 18
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- React Hook Form + Zod
+- Axios
+- jsPDF
 
-First, run the development server:
+## Como executar
+
+### Pré-requisitos
+- Node.js 18+
+- Backend rodando em `https://localhost:7032`
+
+### Instalação
 
 ```bash
+cd frontend
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Estrutura do projeto
+frontend/src/
+├── app/
+│   ├── (auth)/
+│   │   ├── login/
+│   │   └── cadastro/
+│   └── (dashboard)/
+│       ├── desenvolvedores/
+│       ├── estados/
+│       ├── cidades/
+│       └── linguagens/
+├── components/
+│   ├── shared/
+│   └── ui/
+├── lib/
+│   ├── api.ts
+│   └── geradorPdf.ts
+└── types/
+└── index.ts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Decisões técnicas
 
-## Learn More
+**Route Groups do Next.js** — `(auth)` e `(dashboard)` agrupam rotas sem criar segmento na URL, permitindo layouts diferentes para área pública e área autenticada.
 
-To learn more about Next.js, take a look at the following resources:
+**Paginação client-side** — implementada no frontend para simplicidade. Em produção seria server-side para melhor performance.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Validação dupla** — Zod no frontend para feedback imediato ao usuário, FluentValidation no backend como garantia final.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Geração de PDF client-side** — jsPDF gera o relatório diretamente no navegador sem necessidade de endpoint dedicado no backend.
 
-## Deploy on Vercel
+## Melhorias futuras
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Paginação server-side
+- Dark mode
+- Testes com Jest e Testing Library
+- Componentização avançada dos formulários
