@@ -61,6 +61,8 @@ frontend/src/
 ## Melhorias futuras
 
 - Paginação server-side
-- Dark mode
 - Testes com Jest e Testing Library
 - Componentização avançada dos formulários
+- Componentização avançada — separar cada página em 
+  componentes menores (Tabela, Formulário, Filtros) 
+  e extrair lógica para custom hooks
