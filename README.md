@@ -27,6 +27,7 @@ npm run dev
 Acesse `http://localhost:3000`
 
 ## Estrutura do projeto
+```txt
 frontend/src/
 ├── app/
 │   ├── (auth)/
@@ -44,7 +45,8 @@ frontend/src/
 │   ├── api.ts
 │   └── geradorPdf.ts
 └── types/
-└── index.ts
+    └── index.ts
+```
 
 ## Decisões técnicas
 
