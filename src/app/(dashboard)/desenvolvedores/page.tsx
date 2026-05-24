@@ -6,6 +6,7 @@ import api from "@/lib/api";
 import { Desenvolvedor, Linguagem, Cidade, Estado } from "@/types";
 import Paginacao from "@/components/shared/Paginacao";
 import { gerarPdfDesenvolvedor } from "@/lib/geradorPdf";
+import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -124,27 +125,31 @@ export default function PaginaDesenvolvedores() {
   };
 
   const aoEnviarFormulario = async () => {
-  try {
-    setCarregando(true);
-    const dados = {
-      ...formulario,
-      senioridade: mapaSenioridade[formulario.senioridade],
-    };
+    try {
+      setCarregando(true);
+      const dados = {
+        ...formulario,
+        senioridade: mapaSenioridade[formulario.senioridade],
+      };
 
-    if (devEditando) {
-      await api.put(`/desenvolvedores/${devEditando.id}`, {
-        id: devEditando.id,
-        ...dados,
-      });
-      toast.success("Desenvolvedor atualizado com sucesso!");
-    } else {
-      await api.post("/desenvolvedores", dados);
-      toast.success("Desenvolvedor criado com sucesso!");
-    }
+      if (devEditando) {
+        await api.put(`/desenvolvedores/${devEditando.id}`, {
+          id: devEditando.id,
+          ...dados,
+        });
+        toast.success("Desenvolvedor atualizado com sucesso!");
+      } else {
+        await api.post("/desenvolvedores", dados);
+        toast.success("Desenvolvedor criado com sucesso!");
+      }
       setDialogoAberto(false);
       buscarDesenvolvedores();
-    } catch (erro: any) {
-      toast.error(erro.response?.data?.error || "Erro ao salvar desenvolvedor.");
+    } catch (erro: unknown) {
+      if (axios.isAxiosError(erro)) {
+        toast.error(erro.response?.data || "Erro ao salvar cidade.");
+      } else {
+        toast.error("Erro inesperado.");
+      }
     } finally {
       setCarregando(false);
     }
@@ -253,9 +258,9 @@ export default function PaginaDesenvolvedores() {
                     >
                       Deletar
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => aoGerarPdf(dev)}
                     >
                       PDF
@@ -352,11 +357,10 @@ export default function PaginaDesenvolvedores() {
                     key={linguagem.id}
                     type="button"
                     onClick={() => aoAlternarLinguagem(linguagem.id)}
-                    className={`px-3 py-1 rounded-full text-sm border transition-colors ${
-                      formulario.linguagensId.includes(linguagem.id)
+                    className={`px-3 py-1 rounded-full text-sm border transition-colors ${formulario.linguagensId.includes(linguagem.id)
                         ? "bg-gray-900 text-white border-gray-900"
                         : "bg-white text-gray-700 border-gray-300 hover:border-gray-500"
-                    }`}
+                      }`}
                   >
                     {linguagem.nome}
                   </button>

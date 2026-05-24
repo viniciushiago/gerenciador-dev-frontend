@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import api from "@/lib/api";
+import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,10 +41,12 @@ export default function PaginaLogin() {
       localStorage.setItem("token", resposta.data.token);
       toast.success("Login realizado com sucesso!");
       roteador.push("/desenvolvedores");
-    } catch (erro: any) {
-      toast.error(erro.response?.data || "E-mail ou senha inválidos.");
-    } finally {
-      setCarregando(false);
+    } catch (erro: unknown) {
+  if (axios.isAxiosError(erro)) {
+    toast.error(erro.response?.data || "Erro ao fazer login.");
+  } else {
+      toast.error("Erro inesperado.");
+      }
     }
   };
 

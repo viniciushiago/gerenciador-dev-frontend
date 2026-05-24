@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import Paginacao from "@/components/shared/Paginacao";
+import axios from "axios";
 
 export default function PaginaCidades() {
   const [cidades, setCidades] = useState<Cidade[]>([]);
@@ -71,8 +72,12 @@ export default function PaginaCidades() {
       }
       setDialogoAberto(false);
       buscarCidades();
-    } catch (erro: any) {
+    } catch (erro: unknown) {
+    if (axios.isAxiosError(erro)) {
       toast.error(erro.response?.data || "Erro ao salvar cidade.");
+    } else {
+      toast.error("Erro inesperado.");
+    }
     } finally {
       setCarregando(false);
     }
